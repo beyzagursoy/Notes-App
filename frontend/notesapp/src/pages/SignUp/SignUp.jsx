@@ -11,6 +11,8 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
 
+  const apiUrl = import.meta.env.VITE_API_URL;
+
   const navigate = useNavigate();
   const handleSignUp = async (e) => {
     e.preventDefault();
@@ -34,7 +36,7 @@ const SignUp = () => {
 
       //SignUp API Call
       try {
-        const response = await axiosInstance.post("/create-account", {
+        const response = await axiosInstance.post(`${apiUrl}/create-account`, {
             fullName: name,
             email: email,
             password: password,
