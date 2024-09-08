@@ -1,1 +1,1 @@
-export const BASE_URL = 'https://notes-app-backend-n19t.onrender.com';
+export const BASE_URL = 'https://chill-tartan-raccoon.glitch.me/';
