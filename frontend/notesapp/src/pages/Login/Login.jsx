@@ -12,8 +12,6 @@ const Login = () => {
     const [password, setPassword] = useState("");
     const [error, setError] = useState(null);
 
-    const apiUrl = import.meta.env.VITE_API_URL;
-
     const navigate = useNavigate();
 
     const handleLogin =async (e) => {
@@ -34,7 +32,7 @@ const Login = () => {
         //Login API Call
 
         try {
-            const response = await axiosInstance.post(`${apiUrl}/login`, {
+            const response = await axiosInstance.post("/login", {
                 email: email,
                 password: password,
             });
