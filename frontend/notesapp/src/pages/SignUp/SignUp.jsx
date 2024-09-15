@@ -1,112 +1,107 @@
-import { useState } from "react";
-import Navbar from "../../components/Navbar/Navbar";
-import PasswordInput from '../../components/Input/PasswordInput';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { validateEmail } from './../../utils/helper';
+import Navbar from './../../components/Navbar/Navbar';
+import PasswordInput from '../../components/Input/PasswordInput';
+import { validateEmail } from '../../utils/helper';
 import axiosInstance from './../../utils/axiosInstance';
-const SignUp = () => {
 
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
+const Login = () => {
+    const [formData, setFormData] = useState({
+        email: '',
+        password: ''
+    });
 
-  const navigate = useNavigate();
-  const handleSignUp = async (e) => {
-    e.preventDefault();
+    const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
-    if (!name) {
-      setError("Please enter your name");
-      return;
-    }
-
-    if (!validateEmail(email)) {
-      setError("Please enter a valid email address");
-      return;
-    }
-
-    if (!password) {
-      setError("Please enter the password");
-      return;
-    }
-
-    setError("")
-
-      //SignUp API Call
-      try {
-        const response = await axiosInstance.post("/create-account", {
-            fullName: name,
-            email: email,
-            password: password,
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value
         });
+    };
 
-        //Handle succesful registration response
-        if(response.data && response.data.error){
-            setError(response.data.message)
-            return
+    const handleLogin = async (e) => {
+        e.preventDefault();
+
+        const { email, password } = formData;
+
+        if (!validateEmail(email)) {
+            setError("Please enter a valid email address");
+            return;
         }
 
-        if(response.data && response.data.accessToken){
-            localStorage.setItem("token", response.data.accessToken);
-            navigate("/dashboard");
+        if (!password) {
+            setError("Please enter the password");
+            return;
         }
-    } catch (error) {
-        //Handle Login error
-        if (error.response && error.response.data && error.response.data.message) {
-            setError(error.response.data.message);
-        } else {
-            setError("An unexpected error occurred. Please try again later.");
-        } 
-    }
-  };
 
-  return (
-    <>
-      <Navbar />
+        setError("");
 
-      <div className="flex items-center justify-center mt-28">
-        <div className="w-96 border rounded bg-white px-7 py-10">
-          <form onSubmit={handleSignUp}>
-            <h4 className="text-2xl mb-7">SignUp</h4>
+        //Login API Call
+        try {
+            const response = await axiosInstance.post("/login", {
+                email: email,
+                password: password,
+            });
 
-            <input
-              type="text"
-              placeholder="Name"
-              className="input-box"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
+            if (response.data && response.data.accessToken) {
+                localStorage.setItem("token", response.data.accessToken);
+                navigate("/dashboard");
+            }
+        } catch (error) {
+            if (error.response && error.response.data && error.response.data.message) {
+                setError(error.response.data.message);
+            } else {
+                setError("An unexpected error occurred. Please try again later.");
+            }
+        }
+    };
 
-            <input
-              type="text"
-              placeholder="Email"
-              className="input-box"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
+    return (
+        <>
+            <Navbar />
 
-            <PasswordInput
-              value={password}
-              onchange={(e) => setPassword(e.target.value)}
-            />
+            <div className="flex items-center justify-center mt-28">
+                <div className="w-96 border rounded bg-white px-7 py-10">
+                    <form onSubmit={handleLogin}>
+                        <h4 className="text-2xl mb-7">Login</h4>
 
-            {error && <p className="text-red-500 text-xs pb-1">{error}</p>}
+                        {/* Email input */}
+                        <input
+                            type="text"
+                            name="email"
+                            placeholder="Email"
+                            className="input-box"
+                            value={formData.email}
+                            onChange={handleChange}
+                        />
 
-            <button type="submit" className="btn-primary">
-              Create Account
-            </button>
+                        {/* Password input */}
+                        <PasswordInput
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange} 
+                        />
 
-            <p className="text-sm text-center mt-4">
-              Already have an account?{" "}
-              <Link to="/login" className="font-medium text-orange-600 underline ">
-                Login
-              </Link>
-            </p>
-          </form>
-        </div>
-      </div>
-    </>
-  );
+                        {error && <p className="text-red-500 text-xs pb-1">{error}</p>}
+
+                        <button type="submit" className="btn-primary">
+                            Login
+                        </button>
+
+                        <p className="text-sm text-center mt-4">
+                            Not registered yet?{" "}
+                            <Link to="/signup" className="font-medium text-orange-600 underline">
+                                Create an Account
+                            </Link>
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </>
+    );
 };
 
-export default SignUp;
+export default Login;

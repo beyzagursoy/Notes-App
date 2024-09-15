@@ -1,22 +1,25 @@
-import { FaMagnifyingGlass } from 'react-icons/fa6'
-import { IoMdClose } from 'react-icons/io'
+import { FaMagnifyingGlass } from 'react-icons/fa6';
+import { IoMdClose } from 'react-icons/io';
 import PropTypes from 'prop-types';
 
-const SearchBar = ({ value, onChange, handleSearch, onClearSearch}) => {
+const SearchBar = ({ searchState, handleChange, handleSearch, clearSearch }) => {
+  const { searchQuery } = searchState;
+
   return (
     <div className="w-80 flex items-center px-4 bg-slate-100 rounded-md">
       <input
         type="text"
+        name="searchQuery"
         placeholder="Search Notes"
-        value={value}
-        onChange={onChange}
+        value={searchQuery}
+        onChange={(e) => handleChange(e)}
         className="w-full text-xs bg-transparent py-[11px] outline-none"
       />
 
-      {value && (
+      {searchQuery && (
         <IoMdClose 
           className="text-slate-400 cursor-pointer hover:text-black mr-3" 
-          onClick={onClearSearch} 
+          onClick={clearSearch} 
         />
       )}
 
@@ -29,10 +32,12 @@ const SearchBar = ({ value, onChange, handleSearch, onClearSearch}) => {
 };
 
 SearchBar.propTypes = {
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
+  searchState: PropTypes.shape({
+    searchQuery: PropTypes.string.isRequired
+  }).isRequired,
+  handleChange: PropTypes.func.isRequired,
   handleSearch: PropTypes.func.isRequired,
-  onClearSearch: PropTypes.func.isRequired,
+  clearSearch: PropTypes.func.isRequired,
 };
 
 export default SearchBar;

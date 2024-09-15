@@ -1,30 +1,32 @@
-
 import SearchBar from '../SearchBar/SearchBar';
 import ProfileInfo from './../Cards/ProfileInfo';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 
-
-
 const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [formState, setFormState] = useState({
+    searchQuery: ""
+  });
 
   const navigate = useNavigate();
   
-  const onLogout = () => {
-    localStorage.clear();
-    navigate("/login");
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormState(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
   };
 
   const handleSearch = () => {
-    if (searchQuery) {
-      onSearchNote(searchQuery);
+    if (formState.searchQuery) {
+      onSearchNote(formState.searchQuery);
     }
   };
 
   const onClearSearch = () => {
-    setSearchQuery("");
+    setFormState({ searchQuery: "" });
     handleClearSearch();
   };
 
@@ -33,15 +35,16 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
         <h2 className="text-xl font-medium text-black py-2">Notes App</h2>
 
         <SearchBar 
-          value={searchQuery} 
-          onChange={({target}) => {
-            setSearchQuery(target.value);
-          }} 
+          searchState={formState}
+          handleChange={handleChange}
           handleSearch={handleSearch}
-          onClearSearch={onClearSearch}
+          clearSearch={onClearSearch}
         />
         
-        <ProfileInfo userInfo={userInfo} onLogout={onLogout} /> 
+        <ProfileInfo userInfo={userInfo} onLogout={() => {
+          localStorage.clear();
+          navigate("/login");
+        }} /> 
     </div>
   );
 };
@@ -51,6 +54,5 @@ Navbar.propTypes = {
   onSearchNote: PropTypes.func.isRequired,
   handleClearSearch: PropTypes.func.isRequired,
 };
-
 
 export default Navbar;

@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6"
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 import PropTypes from 'prop-types';
 
-const PasswordInput = ({ value, onchange, placeholder }) => {
+const PasswordInput = ({ name, value, onChange, placeholder }) => {
   const [isShowPassword, setIsShowPassword] = useState(false);
 
   const toggleShowPassword = () => {
@@ -13,23 +13,23 @@ const PasswordInput = ({ value, onchange, placeholder }) => {
     <div className="flex items-center bg-transparent border-[1.5px] px-5 rounded mb-3">
       <input
         type={isShowPassword ? "text" : "password"}
-        value={value}
-        onChange={onchange}
+        name={name} 
+        value={value} 
+        onChange={onChange} 
         placeholder={placeholder || "Password"}
-        className="w-full text-sm bg-transparent py-3 mr-r rouned outline-none"
+        className="w-full text-sm bg-transparent py-3 rounded outline-none"
       />
-
       {isShowPassword ? (
         <FaRegEye
           size={22}
           className="text-orange-600 cursor-pointer"
-          onClick={() => toggleShowPassword()}
+          onClick={toggleShowPassword}
         />
       ) : (
         <FaRegEyeSlash
           size={22}
           className="text-slate-400 cursor-pointer"
-          onClick={() => toggleShowPassword()}
+          onClick={toggleShowPassword}
         />
       )}
     </div>
@@ -37,9 +37,10 @@ const PasswordInput = ({ value, onchange, placeholder }) => {
 };
 
 PasswordInput.propTypes = {
-  value: PropTypes.string.isRequired,
-  onchange: PropTypes.func.isRequired,
-  placeholder: PropTypes.string
+  name: PropTypes.string.isRequired, 
+  value: PropTypes.string.isRequired, 
+  onChange: PropTypes.func.isRequired, 
+  placeholder: PropTypes.string 
 };
 
 export default PasswordInput;

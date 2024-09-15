@@ -41,10 +41,10 @@ const Toast = ({ isShown, message, type, onClose}) => {
 };
 
 Toast.propTypes = {
-  isShown: PropTypes.bool.isRequired,  // isShown doğrulaması
-  message: PropTypes.string.isRequired,  // message doğrulaması
-  type: PropTypes.oneOf(['delete', 'success']).isRequired,  // type doğrulaması
-  onClose: PropTypes.func  // onClose doğrulaması
+  isShown: PropTypes.bool.isRequired, 
+  message: PropTypes.string.isRequired,  
+  type: PropTypes.oneOf(['delete', 'success']).isRequired,  
+  onClose: PropTypes.func  
 };
 
 export default Toast;
