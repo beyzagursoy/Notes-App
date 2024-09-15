@@ -1,6 +1,7 @@
 import { MdOutlinePushPin, MdCreate, MdDelete } from "react-icons/md";
 import PropTypes from 'prop-types';
 import moment from "moment";
+import { useSelector } from 'react-redux';
 
 const NoteCard = ({ 
     title, 
@@ -12,12 +13,15 @@ const NoteCard = ({
     onDelete, 
     onPinNote 
 }) => {
+  
+  const { mode } = useSelector((state) => state.darkMode);
+
   return (
-    <div className="border rounded p-4 bg-white hover:shadow-xl transition-all ease-in-out">
+    <div className={`border rounded p-4 ${mode ? 'bg-black text-white' : 'bg-white text-black'} hover:shadow-xl transition-all ease-in-out`}>
       <div className="flex items-center justify-between">
         <div>
           <h6 className="text-sm font-medium">{title}</h6>
-          <span className="text-xs text-slate-500">
+          <span className="text-xs">
             {moment(date).format("Do MMM YYYY")}
           </span>
         </div>
@@ -27,10 +31,10 @@ const NoteCard = ({
         />
       </div>
       
-      <p className="text-xs text-slate-600 mt-2">{content.slice(0, 60)}{content.length > 60 ? "..." : ""}</p>
+      <p className="text-xs mt-2">{content.slice(0, 60)}{content.length > 60 ? "..." : ""}</p>
 
       <div className="flex items-center justify-between mt-2">
-        <div className="text-xs text-slate-500">
+        <div className="text-xs">
           {tags.map((tag, index) => (
             <span key={index}>#{tag} </span>
           ))}

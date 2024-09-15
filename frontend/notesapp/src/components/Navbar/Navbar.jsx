@@ -3,6 +3,8 @@ import ProfileInfo from './../Cards/ProfileInfo';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
+import { toggleDarkMode } from "../../features/darkModeSlice";
+import { useDispatch, useSelector } from 'react-redux';
 
 const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
   const [formState, setFormState] = useState({
@@ -30,9 +32,12 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
     handleClearSearch();
   };
 
+  const { mode } = useSelector((state) => state.darkMode);
+  const dispatch = useDispatch();
+
   return (
-    <div className="bg-white flex items-center justify-between px-6 py-2 drop-shadow">
-        <h2 className="text-xl font-medium text-black py-2">Notes App</h2>
+    <div className={`${mode ? 'bg-black text-white' : 'bg-white text-black'} flex items-center justify-between px-6 py-2 drop-shadow`}>
+        <h2 className="text-xl font-medium py-2">Notes App</h2>
 
         <SearchBar 
           searchState={formState}
@@ -44,7 +49,8 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
         <ProfileInfo userInfo={userInfo} onLogout={() => {
           localStorage.clear();
           navigate("/login");
-        }} /> 
+        }} 
+        onToggleDarkMode={() => dispatch(toggleDarkMode())}/> 
     </div>
   );
 };

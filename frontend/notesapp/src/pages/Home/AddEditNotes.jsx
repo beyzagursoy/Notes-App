@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { MdClose } from 'react-icons/md';
 import PropTypes from 'prop-types';
 import axiosInstance from './../../utils/axiosInstance';
+import { useSelector } from 'react-redux';
 
 const AddEditNotes = ({ noteData, type, getAllNotes, onClose, showToastMessage }) => {
   const [formState, setFormState] = useState({
@@ -12,6 +13,8 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose, showToastMessage }
   });
 
   const [error, setError] = useState(null);
+
+  const { mode } = useSelector((state) => state.darkMode);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -80,20 +83,20 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose, showToastMessage }
   };
 
   return (
-    <div className="relative">
+    <div className={`relative ${mode ? 'bg-black text-white' : 'bg-white text-black'} p-4 rounded`}>
       <button
         className="w-10 h-10 rounded-full flex items-center justify-center absolute -top-3 -right-3 hover:bg-slate-200"
         onClick={onClose}
       >
-        <MdClose className="text-xl text-slate-400" />
+        <MdClose className="text-xl" />
       </button>
 
       <div className="flex flex-col gap-2">
         <label className="input-label">TITLE</label>
         <input
           type="text"
-          name="title" 
-          className="text-2xl text-slate-950 outline-none"
+          name="title"
+          className="text-2xl outline-none bg-transparent"
           placeholder="Go To Gym At 5"
           value={formState.title}
           onChange={handleChange}
@@ -103,8 +106,8 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose, showToastMessage }
       <div className="flex flex-col gap-2 mt-4">
         <label className="input-label">CONTENT</label>
         <textarea
-          name="content" 
-          className="text-sm text-slate-950 outline-none bg-slate-50 p-2 rounded"
+          name="content"
+          className="text-sm outline-none bg-transparent p-2 rounded"
           placeholder="Content"
           rows={10}
           value={formState.content}
